@@ -1,0 +1,4 @@
+[wrap-git]
+url = https://github.com/kth-step/s3k.git
+revision = hakarlsson/25.05
+depth = 1
