@@ -1,3 +1,3 @@
-sources = sources + files('altio.c')
+sources = sources + files('uart.c')
 #incdir = [incdir, include_directories('include')]
-linker_script = meson.current_source_dir() / 'app0.ld'
+linker_script = files('app0.ld')[0]

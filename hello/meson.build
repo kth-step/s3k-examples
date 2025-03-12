@@ -5,23 +5,16 @@ project('hello_world', 'c',
     'c_std=gnu11', 
     'optimization=s'])
 
-s3k = subproject('s3k')
-app0 = subproject('app0')
-
-hexes = [
-  s3k.get_variable('hex'),
-  app0.get_variable('hex'),
+elfs = [
+  subproject('s3k').get_variable('elf'),
+  subproject('app0').get_variable('elf'),
   ]
 
-hex = custom_target(
-  'hello.hex',
-  input : hexes,
-  output : 'hello.hex',
-  command : [
-    find_program('srec_cat'), 
-    '-O', '@OUTPUT@', '-Intel',
-    '@INPUT0@', '-Intel',
-    '@INPUT1@', '-Intel',
-  ],
-  build_by_default : true
-)
+qemu_gen = find_program('../scripts/qemu_gen.sh')
+qemu = custom_target('qemu',
+  output : 'qemu.sh',
+  input : elfs ,
+  command : [qemu_gen, '@OUTPUT@', '@INPUT@'],
+  build_by_default: true,
+  )
+

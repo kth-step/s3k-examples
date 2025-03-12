@@ -6,18 +6,14 @@ project('app0', 'c',
     'optimization=s']
 )
 
-altc = subproject('libaltc')
-altc_dep = altc.get_variable('altc_dep')
-
-s3k = subproject('libs3k')
-s3k_dep = s3k.get_variable('s3k_dep')
 
 subdir('src')
-incdir = include_directories('include')
 
 subdir('platform' / get_option('platform'))
 
-cross_c_args = get_option('c_args')
+libserio_dep = subproject('libserio').get_variable('dep')
+libs3k_dep = subproject('libs3k').get_variable('dep')
+
 c_args = [
   '-DNPROC=' + get_option('nproc').to_string(),
   '-DNHART=' + get_option('nhart').to_string(),
@@ -28,31 +24,15 @@ c_args = [
   '-DNCAP=' + get_option('ncap').to_string(),
 ]
 
-cross_c_link_args = get_option('c_link_args')
-c_link_args = [
+link_args = [
   '-nostdlib',
   '-nostartfiles',
-  '-T', linker_script
+  '-T', linker_script.full_path()
 ]
 
 elf = executable('app0.elf', 
   sources : sources,
-  include_directories : incdir,
-  c_args : cross_c_args + c_args,
-  link_args : cross_c_link_args + c_link_args,
-  dependencies : [altc_dep, s3k_dep]
+  c_args : c_args,
+  link_args : link_args,
+  dependencies : [libs3k_dep, libserio_dep]
 )
-
-hex = custom_target(
-  'app0.hex',
-  input : elf,
-  output : 'app0.hex',
-  command : [
-    find_program('riscv64-unknown-elf-objcopy'), 
-    '--output-target=ihex',
-    '@INPUT@', 
-    '@OUTPUT@'
-  ],
-  build_by_default : true
-)
-
