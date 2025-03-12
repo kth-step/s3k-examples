@@ -6,7 +6,7 @@ This example project demonstrates a simple hello world program.
 
 ```
 # Setup the build system
-meson setup builddir --cross-file ../cross/rv64imac.toml
+meson setup builddir --cross-file ../../cross/rv64imac.toml
 
 # Compile the project
 meson compile -C builddir

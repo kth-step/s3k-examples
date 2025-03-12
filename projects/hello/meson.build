@@ -10,7 +10,7 @@ elfs = [
   subproject('app0').get_variable('elf'),
   ]
 
-qemu_gen = find_program('../scripts/qemu_gen.sh')
+qemu_gen = find_program('../../scripts/qemu_gen.sh')
 qemu = custom_target('qemu',
   output : 'qemu.sh',
   input : elfs ,
